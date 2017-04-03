@@ -1,15 +1,21 @@
 /*global require, console, document*/
+var creds = require('./credentials');
 var Nightmare = require('nightmare');
 var nightmare = Nightmare({
     show: true
 });
 
+if (!creds || !creds.username || !creds.password) {
+    console.warn('missing credentials');
+    return;
+}
+
 nightmare
     .goto('http://allsmak.baseball.cbssports.com/stats/stats-main')
-    .type('#userid', 'USERNAME')
-    .type('#password', 'PASSWORD')
+    .type('#userid', creds.username)
+    .type('#password', creds.password)
     .click('#login_form .formButton')
-    .wait('#standardBody')
+    .wait('#btnExport')
     .click('#btnExport')
     .evaluate(function () {
         'use strict';
